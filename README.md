@@ -258,40 +258,6 @@ GET    /api/reports/monthly - Relatório mensal por professor
 
 ---
 
-## 🎨 Design System
-
-O projeto utiliza um design system minimalista e moderno:
-
-### Cores
-- **Background:** `#0a0a0a` (Preto profundo)
-- **Surface:** `#121212` (Cinza escuro)
-- **Primary:** `#ffffff` (Branco puro)
-- **Accent:** `#3b82f6` (Azul calmo)
-- **Success:** `#10b981` (Verde)
-- **Error:** `#ef4444` (Vermelho)
-
-### Tipografia
-- **Fonte:** Inter (Google Fonts)
-- **Pesos:** 400, 500, 600
-
-### Componentes
-- Botões com animações suaves
-- Cards com hover effects
-- Modais responsivos
-- Formulários com validação visual
-- Toasts para feedback
-- Skeleton loaders
-
----
-
-## 🧪 Scripts Disponíveis
-
-```bash
-npm start          # Inicia o servidor
-npm run dev        # Modo desenvolvimento (com nodemon)
-npm run seed       # Popula o banco com dados iniciais
-npm run reset-db   # Reseta o banco de dados
-```
 
 ---
 
@@ -367,7 +333,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 👨‍💻 Autor
 
-Desenvolvido com ❤️ por **[Seu Nome]**
+Desenvolvido com ❤️ por **Gamerkppyt**
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/seu-perfil)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/seu-usuario)
