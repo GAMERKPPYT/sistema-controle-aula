@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Sistema de Controle de Aulas — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="dash-layout">
+  <div class="dash-layout">
+    
+    <!-- Desktop Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">A</div>
+        <span>Controle de Aulas</span>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <button class="sidebar-link active" onclick="switchTab('aulas')" id="sb-aulas">
+          Aulas da Semana
+        </button>
+        <button class="sidebar-link" onclick="switchTab('relatorio')" id="sb-relatorio">
+          Relatório Mensal
+        </button>
+        <button class="sidebar-link" onclick="switchTab('usuarios')" id="sb-usuarios">
+          Gerir Usuários
+        </button>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="header-user">
+          <div class="user-avatar" id="desktop-user-avatar">A1</div>
+          <div class="user-info">
+            <div class="user-name" id="desktop-user-name">Carregando...</div>
+            <div class="user-role" id="desktop-user-role">Admin</div>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="doLogout()" title="Sair" aria-label="Sair">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <header class="dash-header-mobile">
+      <div class="header-logo">
+        <div class="logo-icon">A</div>
+        <div class="header-brand">Controle de Aulas<span>Administrador</span></div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="doLogout()">Sair</button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dash-main">
+      <!-- Tabs for Mobile Only -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('aulas')" id="tab-aulas">Aulas</button>
+        <button class="tab-btn" onclick="switchTab('relatorio')" id="tab-relatorio">Relatório</button>
+        <button class="tab-btn" onclick="switchTab('usuarios')" id="tab-usuarios">Usuários</button>
+      </div>
+
+    <!-- ── PANE: Aulas ─────────────────────────────────────────── -->
+    <div id="pane-aulas">
+      <!-- Tab Content: Aulas -->
+      <section id="sec-aulas">
+        <!-- Top Stats (Moved here so it's only in Aulas) -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Aulas este mês</div>
+            <div class="stat-value" id="stat-aulas">...</div>
+            <div class="stat-sub" id="stat-month-name">Mês</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Professores</div>
+            <div class="stat-value" id="stat-profs">...</div>
+            <div class="stat-sub">Ativos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Alunos</div>
+            <div class="stat-value" id="stat-alunos">...</div>
+            <div class="stat-sub">Cadastrados</div>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label>Mês</label>
+            <select id="af-month" class="form-input no-icon" onchange="loadAllLessons()"></select>
+          </div>
+          <div class="filter-group">
+            <label>Ano</label>
+            <select id="af-year" class="form-input no-icon" onchange="loadAllLessons()"></select>
+          </div>
+          <div class="filter-group">
+            <label>Professor</label>
+            <select id="af-prof" class="form-input no-icon" onchange="loadAllLessons()"><option value="">Todos</option></select>
+          </div>
+        </div>
+
+        <div class="section-hd">
+          <div class="section-title">Todas as Aulas <span id="total-lessons-count"></span></div>
+        </div>
+
+        <div id="all-lesson-list" class="lesson-list">
+          <div class="empty-state"><p>Carregando...</p></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ── PANE: Relatório ────────────────────────────────────── -->
+    <div id="pane-relatorio" class="hidden">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Mês</label>
+          <select id="rf-month" class="form-input no-icon" onchange="loadReport()"></select>
+        </div>
+        <div class="filter-group">
+          <label>Ano</label>
+          <select id="rf-year" class="form-input no-icon" onchange="loadReport()"></select>
+        </div>
+      </div>
+
+      <div class="section-hd">
+        <div class="section-title">Aulas por Professor <span id="report-period"></span></div>
+      </div>
+      <div id="report-list" class="report-grid">
+        <div class="empty-state"><p>Carregando relatório...</p></div>
+      </div>
+    </div>
+
+    <!-- ── PANE: Usuários ─────────────────────────────────────── -->
+    <div id="pane-usuarios" class="hidden">
+      <div class="section-hd">
+        <div class="section-title">Usuários</div>
+        <button class="btn btn-primary btn-sm" id="btn-new-user" onclick="openNewUserModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Novo Usuário
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Perfil</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="5" style="text-align:center;color:var(--txt-2);padding:2rem">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-aulas" onclick="switchTab('aulas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Aulas
+    </button>
+    <button class="nav-item" id="nav-relatorio" onclick="switchTab('relatorio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      Relatório
+    </button>
+    <button class="nav-item" id="nav-usuarios" onclick="switchTab('usuarios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      Usuários
+    </button>
+    <button class="nav-item" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      Sair
+    </button>
+  </nav>
+
+  <!-- Edit Lesson Modal -->
+  <div id="edit-modal" class="modal-overlay hidden">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 class="modal-title">Editar Aula</h2>
+        <button class="modal-close" onclick="closeEditModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="edit-alert" class="alert hidden"></div>
+        <input type="hidden" id="edit-id">
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">Data *</label>
+            <input type="date" id="e-date" class="form-input no-icon" required></div>
+          <div class="form-group"><label class="form-label">Hora *</label>
+            <input type="time" id="e-time" class="form-input no-icon" required></div>
+        </div>
+        <div class="form-group"><label class="form-label">Dia da Semana</label>
+          <input type="text" id="e-weekday" class="form-input no-icon" readonly style="opacity:.7;cursor:default"></div>
+        <div class="form-group"><label class="form-label">Aluno *</label>
+          <input type="text" id="e-student" list="student-list-edit" class="form-input no-icon" placeholder="Digite ou selecione o aluno..." required maxlength="100" autocomplete="off">
+          <datalist id="student-list-edit"></datalist>
+        </div>
+        <div class="form-row cols-2">
+          <div class="form-group"><label class="form-label">Tipo de Treino</label>
+            <select id="e-type" class="form-input no-icon">
+              <option value="">Selecionar...</option>
+              <option>Musculação</option><option>Funcional</option><option>Cardio</option>
+              <option>Pilates</option><option>HIIT</option><option>Alongamento</option>
+              <option>Avaliação Física</option><option>Outro</option>
+            </select></div>
+          <div class="form-group"><label class="form-label">Duração (min)</label>
+            <input type="number" id="e-duration" class="form-input no-icon" min="1" max="480"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Observações</label>
+          <textarea id="e-obs" class="form-input no-icon" maxlength="500"></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-full" onclick="closeEditModal()">Cancelar</button>
+        <button class="btn btn-primary btn-full" id="edit-save-btn" onclick="saveEdit()">
+          <span id="edit-save-txt">Salvar</span>
+          <span id="edit-save-load" class="hidden"><span class="spinner"></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New/Edit User Modal -->
+  <div id="user-modal" class="modal-overlay hidden">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 class="modal-title" id="user-modal-title">Novo Usuário</h2>
+        <button class="modal-close" onclick="closeUserModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="user-alert" class="alert hidden"></div>
+        <input type="hidden" id="u-id">
+        <div class="form-group"><label class="form-label">Nome *</label>
+          <input type="text" id="u-name" class="form-input no-icon" maxlength="100" required></div>
+        <div class="form-group"><label class="form-label">Email *</label>
+          <input type="email" id="u-email" class="form-input no-icon" required></div>
+        <div class="form-group" id="u-pwd-group"><label class="form-label">Senha *</label>
+          <div class="input-wrap">
+            <input type="password" id="u-password" class="form-input no-icon" placeholder="Mín. 8 chars, 1 maiúscula, 1 número">
+            <button type="button" class="input-toggle" id="u-toggle-pwd">
+              <svg id="u-eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div></div>
+        <div id="u-chpwd-group" class="form-group hidden"><label class="form-label">Nova Senha (opcional)</label>
+          <input type="password" id="u-new-password" class="form-input no-icon" placeholder="Deixe em branco para manter atual"></div>
+        <div class="form-group"><label class="form-label">Perfil *</label>
+          <select id="u-role" class="form-input no-icon">
+            <option value="professor">Professor</option>
+            <option value="admin">Administrador</option>
+          </select></div>
+        <div class="form-group" id="u-active-group" style="display:none">
+          <label class="form-label">Status</label>
+          <select id="u-active" class="form-input no-icon">
+            <option value="1">Ativo</option><option value="0">Inativo</option>
+          </select></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-full" onclick="closeUserModal()">Cancelar</button>
+        <button class="btn btn-primary btn-full" id="u-save-btn" onclick="saveUser()">
+          <span id="u-save-txt">Criar Usuário</span>
+          <span id="u-save-load" class="hidden"><span class="spinner"></span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Report Detail Modal -->
+  <div id="report-detail-modal" class="modal-overlay hidden">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="report-detail-title">Relatório Individual</h2>
+        <button class="modal-close" onclick="closeReportDetail()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 0;">
+        <div class="table-wrap" style="border: none; border-radius: 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Aluno</th>
+              </tr>
+            </thead>
+            <tbody id="report-detail-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-full" onclick="closeReportDetail()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm -->
+  <div id="confirm-overlay" class="confirm-overlay hidden">
+    <div class="confirm-box">
+      <div class="confirm-title" id="confirm-title">Confirmar ação</div>
+      <div class="confirm-msg" id="confirm-msg">Esta ação não pode ser desfeita.</div>
+      <div class="confirm-actions">
+        <button class="btn btn-secondary" onclick="closeConfirm()">Cancelar</button>
+        <button class="btn btn-danger"    id="confirm-yes">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="hidden"></div>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

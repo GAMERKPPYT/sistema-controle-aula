@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Sistema de Controle de Aulas — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <div class="page-auth">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+        </div>
+        <h1 class="auth-title">Controle de Aulas ❤</h1>
+        <p class="auth-sub">Acesse o sistema de gerenciamento⚙</p>
+      </div>
+
+      <form id="login-form">
+        <div id="login-error" class="alert alert-error hidden"></div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">E-mail</label>
+          <div class="input-wrap">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <input type="email" id="email" class="form-input" required placeholder="seu@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Senha</label>
+          <div class="input-wrap">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <input type="password" id="password" class="form-input" required placeholder="••••••••">
+            <button type="button" class="input-toggle" id="toggle-password" title="Mostrar/Ocultar Senha">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full mt-2" id="login-btn">
+          <span id="btn-text">Entrar</span>
+          <span id="btn-loading" class="hidden flex items-center gap-1 justify-center">
+            <span class="spinner"></span> Aguarde...
+          </span>
+        </button>
+      </form>
+
+      <p class="auth-footer-txt" style="text-align: center; color: var(--text-dim); margin-top: 2rem; font-size: 0.8rem;">
+        Sistema de Controle de Aulas &copy; 2026
+      </p>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>
